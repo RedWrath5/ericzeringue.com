@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { CollapseModule } from 'ng2-bootstrap';
 
 import { AppRoutingModule } from './router/app-router.module'
@@ -25,7 +24,6 @@ import { GalleryComponent } from './gallery/gallery.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
     CollapseModule.forRoot(),
     AppRoutingModule
   ],
