@@ -13,13 +13,42 @@ import { Direction } from './Direction';
 export class SnakeComponent implements OnInit {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
-  score = 0;
+  score: number;
   snakeHead: SnakeHead;
   snakeTail: SnakeSegment;
   food: Food;
+  gameLoopRunning: boolean = false;
   
   constructor() {
     
+  }
+
+  //setup game when window.ready
+  ngOnInit() {
+    this.canvas = <HTMLCanvasElement>document.getElementById('cnvs');
+    this.ctx = this.canvas.getContext("2d");
+    document.addEventListener('keydown', this.keyboardInput.bind(this));
+    this.newGame();
+  }
+
+  newGame() {
+    this.score = 0;
+    this.ctx.font="12px monospace";
+    this.snakeHead = new SnakeHead(this.ctx, 20, 20);
+    this.food = new Food(this.ctx, Math.floor(Math.random() * 380) + 10, Math.floor(Math.random() * 180) + 10);
+    this.startGame();
+  }
+
+  startGame() {
+    // If the game loop is already running do not start another one
+    if(!this.gameLoopRunning) {
+      this.gameLoop();
+    }
+    this.gameLoopRunning = true;
+  }
+
+  stopGame() {
+    this.gameLoopRunning = false;
   }
 
   gameLoop() {
@@ -35,21 +64,10 @@ export class SnakeComponent implements OnInit {
       this.ctx.font="42px monospace";
       this.ctx.fillStyle = "yellow";
       this.ctx.fillText("You Lose", 100, 100);
+      this.stopGame();
     } else {
       requestAnimationFrame(this.gameLoop.bind(this));
     }
-  }
-
-  //setup game when window.ready
-  ngOnInit() {
-    this.canvas = <HTMLCanvasElement>document.getElementById('cnvs');
-    this.ctx = this.canvas.getContext("2d");
-    this.ctx.font="12px monospace";
-    this.snakeHead = new SnakeHead(this.ctx, 20, 20);
-    this.food = new Food(this.ctx, Math.floor(Math.random() * 380) + 10, Math.floor(Math.random() * 180) + 10)
-    document.addEventListener('keydown', this.keyboardInput.bind(this));
-    this.gameLoop();
-
   }
 
   checkLoss(): boolean {
@@ -93,19 +111,23 @@ export class SnakeComponent implements OnInit {
   keyboardInput(event: KeyboardEvent) {
     // PRESS LEFT ARROW
     if (event.keyCode == 37 && this.snakeHead.direction != Direction.Right) {
-        this.snakeHead.setDirection(Direction.Left);
+       this.snakeHead.setDirection(Direction.Left);
     }
     // PRESS UP ARROW
     else if (event.keyCode == 38 && this.snakeHead.direction != Direction.Down) {
-        this.snakeHead.setDirection(Direction.Up);
+      this.snakeHead.setDirection(Direction.Up);
     }
     // PRESS RIGHT ARROW
     else if (event.keyCode == 39 && this.snakeHead.direction != Direction.Left) {
-        this.snakeHead.setDirection(Direction.Right);
+      this.snakeHead.setDirection(Direction.Right);
     }
     // PRESS DOWN ARROW
     else if (event.keyCode == 40 && this.snakeHead.direction != Direction.Up) {
-        this.snakeHead.setDirection(Direction.Down);
+      this.snakeHead.setDirection(Direction.Down);
+    }
+    // PRESS 'R'
+    else if (event.keyCode == 82) {
+      this.newGame();  
     }
   }
 
