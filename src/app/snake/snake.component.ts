@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { cCircle } from './cCircle';
 import { SnakeHead } from './SnakeHead';
 import { SnakeSegment } from './SnakeSegment';
 import { Food } from './Food';
