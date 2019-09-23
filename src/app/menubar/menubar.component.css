@@ -1,3 +1,7 @@
 /*!
  * CSS for my menu
  */
+
+ .menu-link-body {
+    font-weight: bold;
+ }
